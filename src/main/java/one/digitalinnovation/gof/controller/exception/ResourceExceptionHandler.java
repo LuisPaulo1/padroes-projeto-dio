@@ -17,42 +17,51 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<StandardError> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		StandardError err = StandardError.builder()
-				.localDateTime(LocalDateTime.now())
-				.status(status.value())
-				.error("Entidade não encontrada")
-				.message(e.getMessage())
-				.path(request.getRequestURI())
-				.build();
+		StandardError err = new StandardError();
+				err.setLocalDateTime(LocalDateTime.now());
+				err.setStatus(status.value());
+				err.setError("Entidade não encontrada");
+				err.setMessage(e.getMessage());
+				err.setPath(request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ValidationError> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ValidationError err = (ValidationError) ValidationError.builder()
-				.localDateTime(LocalDateTime.now())
-				.status(status.value())
-				.error("Erro de validação de dados")
-				.message(e.getMessage())
-				.path(request.getRequestURI())
-				.build();
+		ValidationError err = new ValidationError();
+				err.setLocalDateTime(LocalDateTime.now());
+				err.setStatus(status.value());
+				err.setError("Erro de validação de dados");
+				err.setMessage(e.getMessage());
+				err.setPath(request.getRequestURI());
 		for (FieldError f : e.getBindingResult().getFieldErrors()) {
 			err.addError(f.getField(), f.getDefaultMessage());
 		}
 		return ResponseEntity.status(status).body(err);
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<StandardError> handleErroDeSistema(IllegalArgumentException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new	StandardError();
+		err.setLocalDateTime(LocalDateTime.now());
+		err.setStatus(status.value());
+		err.setError("Erro de dados");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<StandardError> handleErroDeSistema(Exception e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-		StandardError err = StandardError.builder()
-				.localDateTime(LocalDateTime.now())
-				.status(status.value())
-				.error("Erro de sistema")
-				.message(e.getMessage())
-				.path(request.getRequestURI())
-				.build();
+		StandardError err = new	StandardError();
+				err.setLocalDateTime(LocalDateTime.now());
+				err.setStatus(status.value());
+				err.setError("Erro de sistema");
+				err.setMessage(e.getMessage());
+				err.setPath(request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import one.digitalinnovation.gof.model.Cliente;
 import one.digitalinnovation.gof.service.ClienteService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("clientes")
@@ -24,7 +27,7 @@ public class ClienteRestController {
 	private ClienteService clienteService;
 
 	@GetMapping
-	public ResponseEntity<Iterable<Cliente>> buscarTodos() {
+	public ResponseEntity<List<Cliente>> buscarTodos() {
 		return ResponseEntity.ok(clienteService.buscarTodos());
 	}
 
@@ -35,19 +38,20 @@ public class ClienteRestController {
 
 	@PostMapping
 	public ResponseEntity<Cliente> inserir(@RequestBody @Valid Cliente cliente) {
-		clienteService.inserir(cliente);
-		return ResponseEntity.ok(cliente);
+		Cliente novoCliente = clienteService.inserir(cliente);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoCliente.getId()).toUri();
+		return ResponseEntity.created(uri).body(novoCliente);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody @Valid Cliente cliente) {
-		clienteService.atualizar(id, cliente);
-		return ResponseEntity.ok(cliente);
+		Cliente clienteAtualizado = clienteService.atualizar(id, cliente);
+		return ResponseEntity.ok(clienteAtualizado);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		clienteService.deletar(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 }

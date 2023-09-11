@@ -5,8 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -14,7 +12,6 @@ import javax.validation.constraints.NotNull;
 public class Endereco {
 
 	@Id
-	@NotBlank
 	private String cep;
 	private String logradouro;
 	private String complemento;
@@ -25,5 +22,4 @@ public class Endereco {
 	private String gia;
 	private String ddd;
 	private String siafi;
-
 }

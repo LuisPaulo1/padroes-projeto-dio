@@ -1,18 +1,14 @@
 package one.digitalinnovation.gof.controller.exception;
 
-import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class StandardError implements Serializable {
 	private static final long serialVersionUID = 1L;
 
